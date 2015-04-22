@@ -307,6 +307,11 @@ init (struct context *ctx) {
     }
     if (ctx->option.timeout) {
         loop = ev_loop_new(0);
+        if (!loop) {
+            free(ctx->sbuf.data);
+            free(ctx->rbuf.data);
+            return -1;
+        }
         connect_w.data = ctx;
         ev_io_init(&connect_w, on_connect, ctx->fd, EV_WRITE);
         ev_io_start(loop, &connect_w);

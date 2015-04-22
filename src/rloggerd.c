@@ -586,6 +586,12 @@ main (int argc, char *argv[]) {
         }
     }
     loop = ev_loop_new(0);
+    if (!loop) {
+        fprintf(stderr, "ev_loop_new: error\n");
+        close(soc);
+        terminate(&ctx);
+        return -1;
+    }
     ctx.listen.w.data = &ctx;
     ev_io_init(&ctx.listen.w, on_accept, soc, EV_READ);
     ev_io_start(loop, &ctx.listen.w);
